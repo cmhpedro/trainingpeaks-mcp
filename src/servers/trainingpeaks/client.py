@@ -141,8 +141,9 @@ class TrainingPeaksAuthError(TrainingPeaksError):
         return (
             "O cookie do TrainingPeaks está ausente, expirou ou é inválido. Faça login em "
             "app.trainingpeaks.com, copie o cookie Production_tpAuth (DevTools → "
-            "Application → Cookies) e atualize TRAININGPEAKS_AUTH_COOKIE no .env "
-            "do repo mcp. Não precisa reiniciar o servidor."
+            "Application → Cookies) e atualize TRAININGPEAKS_AUTH_COOKIE: rodando local, "
+            "no .env da raiz do repo (sem reiniciar); em container, na variável de ambiente "
+            "do container, recriando-o em seguida."
         )
 
 
