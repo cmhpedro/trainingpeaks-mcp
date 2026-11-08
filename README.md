@@ -161,10 +161,25 @@ src/
     domain.py              models Pydantic de saída
 ```
 
+## Use junto: Garmin Personal MCP
+
+Se você usa relógio Garmin, o [Garmin Personal MCP](https://github.com/Mason-Levyy/garmin-personal-mcp)
+complementa bem este servidor. Ele lê o Garmin Connect pela Personal API oficial da Garmin, com
+uma chave revogável, sem senha e somente leitura. Com os dois conectados, o cliente cruza:
+
+- **TrainingPeaks**: o plano, o que foi prescrito vs. realizado, a carga (TSS, CTL/ATL/TSB) e as
+  provas;
+- **Garmin**: o que o relógio mede no dia a dia, como sono, HRV, Body Battery e estresse, além do
+  detalhe de cada atividade.
+
+Isso permite perguntas como "dormi mal e o HRV caiu: vale manter o intervalado de amanhã?".
+
 ## Créditos
 
 - [JamsusMaximus/trainingpeaks-mcp](https://github.com/JamsusMaximus/trainingpeaks-mcp), pelo
   mapeamento da API do TrainingPeaks.
+- [Mason-Levyy/garmin-personal-mcp](https://github.com/Mason-Levyy/garmin-personal-mcp), pela
+  inspiração na forma de ler as atividades.
 
 ## Licença
 
