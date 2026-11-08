@@ -1,0 +1,10 @@
+[tools]
+python = "3.14"
+
+# `mise install` instala o Python e, em seguida, as dependências do projeto
+[hooks]
+postinstall = ["poetry install"]
+
+[tasks.deploy]
+description = "Builda a imagem dos MCPs e atualiza os containers no host de deploy (via SSH)"
+run = "bash scripts/deploy.sh"

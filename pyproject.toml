@@ -1,0 +1,76 @@
+[project]
+name = "mcp-servers"
+version = "0.1.0"
+requires-python = ">=3.14,<4.0"
+dependencies = [ "httpx (>=0.28.1,<0.29.0)", "loguru (>=0.7.3,<0.8.0)","mcp (>=2.3.0,<3.0.0)", "pydantic (>=2.14.3,<3.0.0)", "pydantic-settings (>=2.16.2,<3.0.0)"]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+package-mode = false
+
+[tool.poe.tasks]
+test = "pytest src"
+type = "pyright src"
+lint = { shell = "ruff check --fix src && ruff format src" }
+
+[dependency-groups]
+dev = [
+    "poethepoet (>=0.49.0,<0.50.0)",
+    "pyright (>=1.1.414,<2.0.0)",
+    "pytest (>=9.2.0,<10.0.0)",
+    "pytest-asyncio (>=1.4.1.post1,<2.0.0)",
+    "ruff (>=0.17.4,<0.18.0)"
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.pyright]
+include = ["src"]
+pythonVersion = "3.14"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+preview = true
+select = ["ALL"]
+ignore = [
+  "CPY",      # flake8-copyright
+
+  "D10",      # undocumented-{public-{module,class,method,function,package,nested-class,init},magic-method}
+  "D203",     # incorrect-blank-line-before-class
+  "D212",     # multi-line-summary-first-line
+  "PLR0913",  # too-many-arguments
+  "TC001",    # typing-only-first-party-import
+  "TC002",    # typing-only-third-party-import
+  "TC003",    # typing-only-standard-library-import
+  "COM812",   # missing-trailing-comma (conflita com o formatter)
+  "DOC",      # pydoclint: docstrings aqui são um resumo curto, sem seções Args/Returns
+  "RUF001",   # ambiguous-unicode-character-string (texto em português)
+  "RUF002",   # ambiguous-unicode-character-docstring (texto em português)
+  "RUF003",   # ambiguous-unicode-character-comment (texto em português)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**log**" = [
+  "I002",     # missing-required-import
+]
+"**/server.py" = [
+  "D205",     # docstring de tool é a descrição para o LLM, não segue PEP 257
+  "D401",
+]
+"**/*_test.py" = [
+  "ANN201",   # missing-return-type-undocumented-public-function
+  "S101",     # assert
+  "PLR2004",  # magic-value-comparison
+  "I002",     # missing-required-import
+  "PLR0915",  # too-many-statements
+]
+
+[tool.ruff.lint.isort]
+required-imports = ["from src.log import logger"]

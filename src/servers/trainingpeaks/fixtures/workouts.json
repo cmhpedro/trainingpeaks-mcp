@@ -1,0 +1,5 @@
+[
+  {"workoutId": 1001, "workoutDay": "2026-11-02T00:00:00", "startTime": "2026-11-02T06:30:00", "title": "Rodagem leve", "workoutTypeValueId": 3, "totalTimePlanned": 0.75, "totalTime": 0.8, "distancePlanned": 8000, "distance": 8450.5, "tssPlanned": 45, "tssActual": 48.36, "if": 0.78, "heartRateAverage": 142.4, "velocityAverage": 2.933, "elevationGain": 52.2, "calories": 610, "description": "Z2 conversável", "completed": true},
+  {"workoutId": 1002, "workoutDay": "2026-11-03T00:00:00", "title": "Pedal com tiros", "workoutTypeValueId": 2, "totalTimePlanned": 1.5, "totalTime": 1.5, "distance": 45000, "tssPlanned": 90, "tssActual": 95.1, "if": 0.85, "powerAverage": 201.6, "normalizedPowerActual": 228.2, "velocityAverage": 8.333},
+  {"workoutId": 1003, "workoutDay": "2026-11-05T00:00:00", "title": "Natação técnica", "workoutTypeValueId": 1, "totalTimePlanned": 1.0, "distancePlanned": 2500, "tssPlanned": 50}
+]

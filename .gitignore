@@ -1,0 +1,12 @@
+# dependencies
+.venv
+__pycache__
+
+# testing
+.pytest_cache
+
+# misc
+.ruff_cache
+
+# local env files
+.env
