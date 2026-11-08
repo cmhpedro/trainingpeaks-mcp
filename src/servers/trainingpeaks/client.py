@@ -6,7 +6,7 @@ from collections.abc import Callable
 from datetime import date, datetime
 
 from httpx import AsyncBaseTransport, AsyncClient, HTTPStatusError, Response
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, JsonValue
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, JsonValue, model_validator
 
 from src.lib.http import AutoRaiseTransport, ReadOnlyTransport, is_retryable_http_error
 from src.lib.retry import retry
@@ -772,6 +772,15 @@ def _validate_list[T: BaseModel](model: type[T], payload: JsonValue) -> list[T]:
 
 class _RawModel(BaseModel):
     model_config = ConfigDict(extra="ignore", populate_by_name=True)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _drop_nulls(cls, data: object) -> object:
+        # A API manda `null` onde deveria mandar lista/objeto vazio (ex.: `attachmentFileInfos`
+        # de treino planejado); sem a chave, vale o default do campo
+        if isinstance(data, dict):
+            return {key: value for key, value in data.items() if value is not None}
+        return data
 
 
 class _RawTokenData(_RawModel):

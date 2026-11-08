@@ -214,3 +214,21 @@ async def test_get_workout_analysis_without_device_file_returns_empty_channels()
     request = api.requests_to("/workout-analysis/v2/analyze/summary")[0]
     assert request.url.host == "api.peakswaresb.com"
     assert request.headers["Origin"] == "https://app.trainingpeaks.com"
+
+
+@pytest.mark.asyncio
+async def test_list_workout_files_of_planned_workout_accepts_null_lists():
+    # Arrange
+    api = FakeTrainingPeaksApi()
+    api.add(
+        "GET",
+        f"{_WORKOUT_PATH}/details",
+        {"workoutDeviceFileInfos": None, "attachmentFileInfos": None},
+    )
+    sut = _make_sut(api)
+
+    # Act
+    files = await sut.list_workout_files(1001)
+
+    # Assert
+    assert files == []
