@@ -10,3 +10,6 @@ __pycache__
 
 # local env files
 .env
+
+# configuração local do mise (DEPLOY_HOST etc.)
+mise.local.toml
