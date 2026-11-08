@@ -13,3 +13,6 @@ __pycache__
 
 # configuração local do mise (DEPLOY_HOST etc.)
 mise.local.toml
+
+# instruções do Claude Code sobre a infra própria (repo é público)
+CLAUDE.local.md
