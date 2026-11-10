@@ -31,6 +31,7 @@ class FakeTrainingPeaksApi:
     def __post_init__(self) -> None:
         self.add("GET", "/users/v3/token", load_fixture("token"))
         self.add("GET", "/users/v3/user", load_fixture("user"))
+        self.add("GET", f"/fitness/v1/athletes/{ATHLETE_ID}/equipment", load_fixture("equipment"))
 
     def add(self, method: str, path: str, body: JsonValue, *, status: int = 200) -> None:
         self.routes[f"{method} {path}"] = (status, body)

@@ -96,11 +96,11 @@ class TrainingPeaksService:
             count=len(workouts),
             truncated=len(workouts) > limit,
             totals=_completed_totals_by_sport(workouts),
-            workouts=workouts[:limit],
+            workouts=await self._with_equipment_names(workouts[:limit]),
         )
 
     async def get_workout(self, workout_id: int) -> WorkoutDetailModel:
-        workout = await self._client.get_workout(workout_id)
+        [workout] = await self._with_equipment_names([await self._client.get_workout(workout_id)])
         files, personal_records = await asyncio.gather(
             self._client.list_workout_files(workout_id),
             self._client.list_workout_personal_records(workout_id),
@@ -178,7 +178,7 @@ class TrainingPeaksService:
             self._client.list_fitness(monday, sunday),
             self._client.list_strength_workouts(monday, sunday),
         )
-        workouts = sorted(workouts, key=_workout_sort_key)
+        workouts = await self._with_equipment_names(sorted(workouts, key=_workout_sort_key))
         return WeekSummaryModel(
             start_date=monday,
             end_date=sunday,
@@ -236,6 +236,21 @@ class TrainingPeaksService:
             nutrition=nutrition,
         )
 
+    async def _with_equipment_names[W: WorkoutSummaryModel](self, workouts: list[W]) -> list[W]:
+        # O treino só traz o id do tênis/bike; o nome vem da lista de equipamentos
+        if not any(workout.shoe_id or workout.bike_id for workout in workouts):
+            return workouts
+        names = {item.id: item.name for item in await self._client.list_equipment()}
+        return [
+            workout.model_copy(
+                update={
+                    "shoe": _equipment_name(names, workout.shoe_id),
+                    "bike": _equipment_name(names, workout.bike_id),
+                },
+            )
+            for workout in workouts
+        ]
+
     async def _fetch_workouts(self, start: date, end: date) -> list[WorkoutSummaryModel]:
         windows = split_date_range(start, end, max_days=_WORKOUTS_WINDOW_DAYS)
         workouts_by_window = [
@@ -263,6 +278,10 @@ def _completed_totals_by_sport(workouts: list[WorkoutSummaryModel]) -> list[Spor
         )
         for sport, sport_workouts in sorted(grouped.items())
     ]
+
+
+def _equipment_name(names: dict[int, str | None], equipment_id: int | None) -> str | None:
+    return names.get(equipment_id) if equipment_id is not None else None
 
 
 def _workout_sort_key(workout: WorkoutSummaryModel) -> tuple[date, str]:

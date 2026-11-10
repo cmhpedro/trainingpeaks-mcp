@@ -41,8 +41,8 @@ listados em `_READ_ONLY_POST_PATHS` no `client.py`:
 | Tool | O que devolve |
 |---|---|
 | `get_athlete_profile` | Dados pessoais, conta, limiares e zonas (potência, FC, pace), calorias, piscinas |
-| `list_workouts` | Treinos de um período (planejados/realizados), com totais por esporte |
-| `get_workout` | Detalhe do treino: planejado vs realizado, estrutura, comentários, nota privada, arquivos, recordes |
+| `list_workouts` | Treinos de um período (planejados/realizados), com totais por esporte e o tênis/bike usado |
+| `get_workout` | Detalhe do treino: planejado vs realizado, estrutura, comentários, nota privada, arquivos, recordes, tênis/bike |
 | `get_workout_analysis` | Totais, canais com zonas, voltas e amostra da série temporal |
 | `list_strength_workouts` | Treinos do construtor de força (não aparecem em `list_workouts`) |
 | `get_strength_workout` | Blocos, exercícios e séries (prescrito vs executado) |
@@ -54,7 +54,7 @@ listados em `_READ_ONLY_POST_PATHS` no `client.py`:
 | `list_calendar_notes` | Notas do calendário com comentários |
 | `list_availability` | Indisponibilidades e disponibilidade limitada |
 | `get_health_metrics` | Peso, HRV, sono, FC de repouso etc. e nutrição |
-| `list_equipment` | Bikes e tênis com quilometragem |
+| `list_equipment` | Bikes e tênis com quilometragem total (já somando a inicial) e limite de troca |
 | `list_workout_libraries` | Bibliotecas de treinos-modelo |
 | `list_library_workouts` | Treinos-modelo de uma biblioteca |
 | `get_library_workout` | Treino-modelo com estrutura de intervalos |

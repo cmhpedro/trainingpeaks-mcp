@@ -408,7 +408,11 @@ async def list_equipment(
         Field(description="Incluir bikes e tênis aposentados"),
     ] = False,
 ) -> EquipmentListModel:
-    """Bikes e tênis cadastrados com distância acumulada e limite de troca."""
+    """
+    Bikes e tênis cadastrados: distância total (já somando a distância inicial), limite de
+    troca, se é o padrão e se está aposentado. Qual tênis/bike foi usado em cada treino vem
+    em `shoe`/`bike` de list_workouts, get_workout e get_week_summary.
+    """
     with _translate_errors():
         equipment = await _app(ctx).client.list_equipment()
     return EquipmentListModel(

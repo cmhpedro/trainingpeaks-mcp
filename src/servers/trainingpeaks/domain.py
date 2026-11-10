@@ -116,6 +116,10 @@ class WorkoutSummaryModel(BaseModel):
     rpe: int | None = Field(description="Esforço percebido (1-10)")
     feeling: int | None = Field(description="Sensação registrada pelo atleta (0-10)")
     description: str | None = Field(description="Descrição/instruções do treino")
+    shoe_id: int | None = Field(default=None, description="Tênis usado (id de list_equipment)")
+    shoe: str | None = Field(default=None, description="Nome do tênis usado")
+    bike_id: int | None = Field(default=None, description="Bike usada (id de list_equipment)")
+    bike: str | None = Field(default=None, description="Nome da bike usada")
 
 
 class WorkoutCommentModel(BaseModel):
@@ -367,9 +371,15 @@ class EquipmentModel(BaseModel):
     kind: EquipmentKind
     brand: str | None
     model: str | None
-    distance_km: float | None = Field(description="Distância acumulada")
+    distance_km: float | None = Field(
+        description="Distância total do equipamento, já somando a distância inicial",
+    )
+    starting_distance_km: float | None = Field(
+        description="Distância que o equipamento já tinha quando foi cadastrado",
+    )
     max_distance_km: float | None = Field(description="Limite de troca configurado")
     retired: bool
+    retired_date: date | None
     is_default: bool
     purchase_date: date | None
     notes: str | None

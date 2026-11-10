@@ -232,3 +232,26 @@ async def test_list_workout_files_of_planned_workout_accepts_null_lists():
 
     # Assert
     assert files == []
+
+
+@pytest.mark.asyncio
+async def test_list_equipment_reads_total_and_starting_distance():
+    # Arrange
+    api = FakeTrainingPeaksApi()
+    sut = _make_sut(api)
+
+    # Act
+    equipment = await sut.list_equipment()
+
+    # Assert
+    racing_shoe, bike, old_shoe = equipment
+    assert racing_shoe.kind == "shoe"
+    assert racing_shoe.distance_km == pytest.approx(265.28)
+    assert racing_shoe.max_distance_km is None
+    assert bike.kind == "bike"
+    assert bike.max_distance_km == pytest.approx(800.0)
+    assert bike.is_default
+    assert old_shoe.distance_km == pytest.approx(571.34)
+    assert old_shoe.starting_distance_km == pytest.approx(208.0)
+    assert old_shoe.retired
+    assert old_shoe.retired_date == date(2025, 4, 26)

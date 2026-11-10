@@ -125,6 +125,9 @@ async def test_get_workout_merges_files_note_and_records():
     assert [file.name for file in workout.files] == ["garmin.fit"]
     assert workout.personal_records[0].type == "speed5K"
     assert workout.personal_records[0].timeframe == "All Time"
+    assert workout.shoe_id == 11
+    assert workout.shoe == "Tênis de prova"
+    assert workout.bike is None
 
 
 @pytest.mark.asyncio
@@ -209,3 +212,30 @@ async def test_get_fitness_reports_current_form():
     assert fitness.current is not None
     assert fitness.current.tsb == pytest.approx(1.6)
     assert fitness.form_status == "Neutro (treino normal)"
+
+
+@pytest.mark.asyncio
+async def test_list_workouts_names_the_shoe_used_with_a_single_equipment_request():
+    # Arrange
+    api = FakeTrainingPeaksApi()
+    api.add(
+        "GET",
+        f"/fitness/v6/athletes/{ATHLETE_ID}/workouts/2026-11-02/2026-11-08",
+        load_fixture("workouts"),
+    )
+    sut = _make_sut(api)
+
+    # Act
+    result = await sut.list_workouts(
+        date(2026, 11, 2),
+        date(2026, 11, 8),
+        status="all",
+        sport=None,
+        limit=50,
+    )
+
+    # Assert
+    shoes = {workout.id: (workout.shoe_id, workout.shoe) for workout in result.workouts}
+    assert shoes[1001] == (11, "Tênis de prova")
+    assert all(shoe == (None, None) for workout_id, shoe in shoes.items() if workout_id != 1001)
+    assert len(api.requests_to(f"/fitness/v1/athletes/{ATHLETE_ID}/equipment")) == 1

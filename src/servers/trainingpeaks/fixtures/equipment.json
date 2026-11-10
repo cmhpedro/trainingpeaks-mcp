@@ -1,0 +1,5 @@
+[
+  {"maxDistance": 0.0, "equipmentId": 11, "type": 2, "name": "Tênis de prova", "notes": null, "brand": "Marca", "model": "Carbono", "dateOfPurchase": "2025-12-08T00:00:00", "athleteId": 123, "retired": false, "retiredDate": null, "isDefault": false, "startingDistance": 0.0, "actualDistance": 265283.0791015625},
+  {"maxDistance": 800000.0, "equipmentId": 12, "type": 1, "name": "Bike de estrada", "notes": "Pneus novos", "brand": "Marca", "model": "Road", "dateOfPurchase": "2024-03-24T00:00:00", "athleteId": 123, "retired": false, "retiredDate": null, "isDefault": true, "startingDistance": 0.0, "actualDistance": 1200400.0},
+  {"maxDistance": 0.0, "equipmentId": 13, "type": 2, "name": "Tênis antigo", "notes": null, "brand": "Marca", "model": "Treino", "dateOfPurchase": "2024-03-24T00:00:00", "athleteId": 123, "retired": true, "retiredDate": "2025-04-26T00:00:00", "isDefault": false, "startingDistance": 208000.0, "actualDistance": 571336.6202392578}
+]

@@ -519,9 +519,11 @@ class TrainingPeaksClient:  # ruff: ignore[too-many-public-methods] - um método
                 kind=_EQUIPMENT_KINDS.get(raw.equipment_type or 0, "other"),
                 brand=raw.brand or None,
                 model=raw.model or None,
-                distance_km=meters_to_km(raw.distance),
+                distance_km=meters_to_km(raw.actual_distance),
+                starting_distance_km=meters_to_km(raw.starting_distance),
                 max_distance_km=meters_to_km(raw.max_distance) if raw.max_distance else None,
                 retired=raw.retired,
+                retired_date=_to_date(raw.retired_date),
                 is_default=raw.is_default,
                 purchase_date=_to_date(raw.date_of_purchase),
                 notes=raw.notes or None,
@@ -906,6 +908,8 @@ class _RawWorkout(_RawModel):
         default_factory=list,
         alias="workoutComments",
     )
+    equipment_shoe_id: int | None = Field(default=None, alias="equipmentShoeId")
+    equipment_bike_id: int | None = Field(default=None, alias="equipmentBikeId")
     has_private_note: bool = Field(default=False, alias="hasPrivateWorkoutNoteForCaller")
 
 
@@ -1076,12 +1080,21 @@ class _RawMetricEntry(_RawModel):
 class _RawEquipment(_RawModel):
     equipment_id: int = Field(alias="equipmentId")
     name: str | None = None
-    equipment_type: int | None = Field(default=None, alias="equipmentType")
+    equipment_type: int | None = Field(
+        default=None,
+        validation_alias=AliasChoices("type", "equipmentType"),
+    )
     brand: str | None = None
     model: str | None = None
-    distance: float | None = None
+    # Total do equipamento, já somando `startingDistance`
+    actual_distance: float | None = Field(
+        default=None,
+        validation_alias=AliasChoices("actualDistance", "distance"),
+    )
+    starting_distance: float | None = Field(default=None, alias="startingDistance")
     max_distance: float | None = Field(default=None, alias="maxDistance")
     retired: bool = False
+    retired_date: str | None = Field(default=None, alias="retiredDate")
     is_default: bool = Field(default=False, alias="isDefault")
     date_of_purchase: str | None = Field(default=None, alias="dateOfPurchase")
     notes: str | None = None
@@ -1294,6 +1307,8 @@ def _workout_summary_fields(raw: _RawWorkout) -> dict[str, object]:
         "rpe": raw.rpe,
         "feeling": raw.feeling,
         "description": raw.description or None,
+        "shoe_id": raw.equipment_shoe_id,
+        "bike_id": raw.equipment_bike_id,
     }
 
 
